@@ -1,3 +1,5 @@
+import { sendNtfy } from "./ntfy.js";
+
 const STATION_URL =
     "https://legacy-map.poweredbyvirta.com/api/core/v4/stations/20607";
 
@@ -9,20 +11,29 @@ async function checkStation() {
         const data = await response.json();
 
         let available = 0;
+        let availableList = [];
 
         for (const evse of data.evses) {
 
-            // Only AC (Mennekes) and CCS
-            const usable = evse.connectors.some(c =>
-                c.type === "Mennekes" || c.type === "CCS"
-            );
-
-            if (!usable)
+            if (!evse.available)
                 continue;
 
-            if (evse.available)
+            for (const connector of evse.connectors) {
+
+                if (connector.type !== "Mennekes" &&
+                    connector.type !== "CCS")
+                    continue;
+
                 available++;
+
+                availableList.push({
+                    type: connector.type === "Mennekes" ? "AC" : "CCS",
+                    id: evse.id,
+                    power: connector.maxKw
+                });
+            }
         }
+
 
         chrome.action.setBadgeText({
             text: available ? String(available) : ""
@@ -38,10 +49,22 @@ async function checkStation() {
                 type: "basic",
                 iconUrl: "icons/icon128.png",
                 title: "Virta Monitor",
-                message:
-                    `${available} usable connector(s) available`
+                message: `${available} connector(s) available`
             });
 
+            const message =
+                availableList
+                    .map(c => `✅ ${c.type} (${c.power} kW)  EVSE ${c.id}`)
+                    .join("\n");
+
+            await sendNtfy(
+                "⚡ Virta Monitor",
+            `Kotikeskus Jyväskylä
+
+            ${message}
+
+            Total available: ${available}`
+            );
         }
 
         previousAvailable = available;

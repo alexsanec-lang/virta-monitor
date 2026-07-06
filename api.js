@@ -9,9 +9,7 @@ export const CONFIG = {
 };
 
 export async function loadStation(url) {
-
     const r = await fetch(url);
-
     if (!r.ok)
         throw new Error(`HTTP ${r.status}`);
 
@@ -19,13 +17,9 @@ export async function loadStation(url) {
 }
 
 export function parseStation(data) {
-
     const connectors = [];
-
     for (const evse of data.evses) {
-
         for (const connector of evse.connectors) {
-
             if (
                 connector.type !== "Mennekes" &&
                 connector.type !== "CCS"
@@ -39,10 +33,7 @@ export function parseStation(data) {
                 status: connector.operativeStatus,
                 online: evse.connectivityStatus === "Online"
             });
-
         }
-
     }
-
     return connectors;
 }
