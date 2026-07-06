@@ -1,0 +1,70 @@
+body{
+
+    background:#202124;
+    color:white;
+
+    font-family:Arial;
+
+    width:320px;
+
+    margin:0;
+
+}
+
+header{
+
+    background:#2d2d2d;
+
+    padding:10px;
+
+    font-size:18px;
+
+}
+
+#list{
+
+    padding:10px;
+
+}
+
+.card{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-bottom:8px;
+
+    padding:8px;
+
+    border-radius:8px;
+
+    background:#333;
+
+}
+
+.green{
+
+    color:#5CFF6A;
+
+    font-weight:bold;
+
+}
+
+.red{
+
+    color:#ff6060;
+
+    font-weight:bold;
+
+}
+
+footer{
+
+    padding:10px;
+
+    font-size:11px;
+
+    color:#999;
+
+}
