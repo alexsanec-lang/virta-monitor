@@ -1,31 +1,40 @@
-const url =
-    "https://legacy-map.poweredbyvirta.com/api/core/v4/stations/20607";
+import {CONFIG, loadStation, parseStation} from "./api.js";
 
-async function load() {
+const list=document.getElementById("list");
 
-    const r = await fetch(url);
-    const data = await r.json();
+const updated=document.getElementById("updated");
 
-    let text = "";
+async function refresh(){
 
-    for(const evse of data.evses){
+    const station=await loadStation(CONFIG.stations[0].url);
 
-        const type =
-            evse.connectors.some(c=>c.type==="CCS")
-                ? "CCS"
-                : "AC";
+    const connectors=parseStation(station);
 
-        text +=
-`${type}
-Status: ${evse.operativeStatus}
-Available: ${evse.available}
+    list.innerHTML="";
 
-`;
+    connectors.forEach(c=>{
 
-    }
+        const div=document.createElement("div");
 
-    document.getElementById("status").innerText=text;
+        div.className="card";
+
+        div.innerHTML=`
+            <span>${c.type}</span>
+            <span class="${c.available?"green":"red"}">
+            ${c.available?"AVAILABLE":c.status}
+            </span>
+        `;
+
+        list.appendChild(div);
+
+    });
+
+    updated.textContent=
+        "Updated "+
+        new Date().toLocaleTimeString();
 
 }
 
-load();
+refresh();
+
+setInterval(refresh,10000);
