@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "Virta Monitor",
+  "description": "Monitor Virta EV chargers and notify when AC or CCS becomes available.",
+  "version": "0.1.0",
+  "permissions": [
+    "alarms",
+    "notifications",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://legacy-map.poweredbyvirta.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Virta Monitor",
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
