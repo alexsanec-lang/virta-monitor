@@ -43,8 +43,10 @@ async function checkStation() {
             color: available ? "#00AA00" : "#AA0000"
         });
 
-        if (available > previousAvailable) {
+        console.log(available + " prev:  " + previousAvailable);
 
+
+        if (available > previousAvailable) {
             chrome.notifications.create({
                 type: "basic",
                 iconUrl: "icons/icon128.png",
@@ -54,21 +56,14 @@ async function checkStation() {
 
             const message =
                 availableList
-                    .map(c => `✅ ${c.type} (${c.power} kW)  EVSE ${c.id}`)
+                    .map(c => `${c.type} ${c.id}`)
                     .join("\n");
 
-            await sendNtfy(
-                "⚡ Virta Monitor",
-            `Kotikeskus Jyväskylä
-
-            ${message}
-
-            Total available: ${available}`
-            );
+            await sendNtfy(`${message}`);
         }
 
         previousAvailable = available;
-
+        
     } catch (err) {
         console.error(err);
     }
@@ -77,7 +72,7 @@ async function checkStation() {
 chrome.runtime.onInstalled.addListener(() => {
 
     chrome.alarms.create("check", {
-        periodInMinutes: 1 / 6 // 10 seconds
+        periodInMinutes: 1/2 // 1 / 6 // 10 seconds
     });
 
     checkStation();

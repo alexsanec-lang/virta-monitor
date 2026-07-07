@@ -37,4 +37,4 @@ async function refresh(){
 
 refresh();
 
-setInterval(refresh,30000);
+setInterval(refresh,10000);
